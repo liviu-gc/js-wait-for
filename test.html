@@ -1,0 +1,63 @@
+<b>Test:</b> <a href="wait-for.js">wait-for.js</a>
+<hr/>
+<p id="w1">waitFor #1: (cancelable) 
+  <textarea class="counter"></textarea>
+  <button class="btn btn-done">Condition met</button> 
+  <button class="btn btn-cancel">(cancel)</button>
+</p>
+<hr/>
+<p id="w2">waitFor #2: (uncancelable) 
+  <textarea class="counter"></textarea>
+  <button class="btn btn-done">Condition met</button> 
+  <button class="btn btn-cancel">(cancel)</button>
+</p>
+
+<script src="wait-for.js"></script>
+<script>
+/**
+  * demo UI
+  */
+var s1 = document.querySelector("#w1 > .counter");
+var b1_done = document.querySelector("#w1 .btn-done");
+var b1_cancel = document.querySelector("#w1 .btn-cancel");
+b1_done.onclick = function() { window.condition_s1 = true; };
+b1_cancel.onclick = function() { w1.cancel(); };
+
+var s2 = document.querySelector("#w2 > .counter");
+var b2_done = document.querySelector("#w2 .btn-done");
+var b2_cancel = document.querySelector("#w2 .btn-cancel");
+b2_done.onclick = function() { window.condition_s2 = true; };
+b2_cancel.onclick = function() { w2.cancel(); };
+
+/**
+  * obj #1 cancelable
+  * three param: fn, fn, num
+  */
+var w1 = new waitFor(
+  function() {
+    s1.value += ".";
+    return window.condition_s1 !== undefined;
+  },
+  function(id) {
+    s1.value = "[DONE] #id:"+ id;
+  },
+  500
+);
+
+/**
+  * obj #2 uncancelable
+  * one param: obj
+  */
+
+var w2 = new waitFor({
+  cond:function() {
+    s2.value += ".";
+    return window.condition_s2 !== undefined;
+  },
+  call:function(id) {
+    s2.value = "[DONE] #id:"+ id;
+  },
+  cancelable: false,
+  iti: 650
+});
+</script>
