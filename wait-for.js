@@ -4,7 +4,7 @@ var waitFor = (function(){
   
   return function (p1, p2, p3) {
     
-    if (!new.target) { throw 'waitFor() must be called with new'; }
+    if (!new.target) { throw 'waitFor Error: must be called with *new waitFor(...)*'; }
     
     var t = this, _t = {
       id: ++id,
@@ -17,7 +17,7 @@ var waitFor = (function(){
     };
     
     if (typeof p1 === 'undefined')
-      return false;
+      throw 'waitFor Error: missing parameters';
     
     if (typeof p1 === 'function' && typeof p2 === 'function') {
       
@@ -41,7 +41,7 @@ var waitFor = (function(){
     }
     
     if (!_t.fnCondition || !_t.fnCallback)
-      return false;
+      throw 'waitFor Error: missing parameters';
     
     _t.T = setInterval( function() {
       if (_t.fnCondition( t.getId() )) {
